@@ -1,0 +1,13 @@
+/* CompanyData for WooCommerce - checkout autocomplete. Inherits the theme's fonts and colours. */
+.cdwc-wrap { position: relative; }
+.cdwc-results { position: absolute; left: 0; right: 0; top: 100%; z-index: 1000; margin: 2px 0 0; padding: 4px 0; list-style: none; background: #fff; color: #1e1e1e; border: 1px solid #c3c4c7; border-radius: 6px; box-shadow: 0 8px 24px rgba(0,0,0,0.12); max-height: 320px; overflow-y: auto; }
+.cdwc-results li { display: flex; flex-direction: column; gap: 1px; padding: 8px 12px; cursor: pointer; line-height: 1.35; }
+.cdwc-results li + li { border-top: 1px solid #f0f0f1; }
+.cdwc-results li:hover, .cdwc-results li.is-active { background: #f0f6fc; }
+.cdwc-results strong { font-weight: 600; }
+.cdwc-results .cdwc-addr { font-size: 0.9em; opacity: 0.8; }
+.cdwc-results .cdwc-reg { font-size: 0.8em; opacity: 0.65; }
+.cdwc-results .cdwc-foreign { font-size: 0.8em; color: #996800; }
+.cdwc-note { margin: 0.35em 0 0; font-size: 0.85em; opacity: 0.8; }
+.cdwc-credit { font-size: 0.8em; opacity: 0.7; margin: -0.5em 0 1em; }
+.cdwc-credit a { color: inherit; }

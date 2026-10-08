@@ -1,0 +1,9 @@
+.cdwc-admin .cdwc-card { background: #fff; border: 1px solid #c3c4c7; border-radius: 6px; padding: 1rem 1.25rem; margin: 1rem 0; max-width: 900px; }
+.cdwc-admin .cdwc-status { font-size: 1.05em; display: flex; align-items: center; gap: 0.4rem; flex-wrap: wrap; }
+.cdwc-admin .cdwc-status-ok .dashicons { color: #00a32a; }
+.cdwc-admin .cdwc-inline { margin-left: 0.75rem; }
+.cdwc-admin .cdwc-limits label { display: inline-block; margin: 0 1.25rem 0.5rem 0; }
+.cdwc-admin .cdwc-fields label { display: inline-block; margin: 0 1.25rem 0.4rem 0; }
+.cdwc-admin .cdwc-test { display: flex; align-items: center; gap: 0.75rem; margin-top: -0.5rem; }
+.cdwc-admin .cdwc-usage { max-width: 600px; }
+.cdwc-admin .notice.inline { margin: 1rem 0; }
