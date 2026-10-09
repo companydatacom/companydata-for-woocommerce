@@ -1,6 +1,6 @@
 <?php
 /**
- * Plugin Name:       CompanyData for WooCommerce - Company Lookup & Address Autofill
+ * Plugin Name:       CompanyData - Company Lookup & Address Autofill
  * Plugin URI:        https://github.com/companydatacom/companydata-for-woocommerce
  * Description:       Customers type their company name or registration number at checkout and the billing address fills itself from 345M+ company records. The registration number is saved on the order.
  * Version:           0.1.0
@@ -13,7 +13,7 @@
  * Author URI:        https://companydata.com/
  * License:           GPL-2.0-or-later
  * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
- * Text Domain:       companydata-for-woocommerce
+ * Text Domain:       companydata-company-lookup
  */
 
 if ( ! defined( 'ABSPATH' ) ) {

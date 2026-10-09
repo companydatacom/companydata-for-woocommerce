@@ -20,16 +20,16 @@ class Privacy {
 	}
 
 	public static function register_exporter( array $exporters ): array {
-		$exporters['companydata-for-woocommerce'] = array(
-			'exporter_friendly_name' => __( 'CompanyData for WooCommerce', 'companydata-for-woocommerce' ),
+		$exporters['companydata-company-lookup'] = array(
+			'exporter_friendly_name' => __( 'CompanyData Company Lookup', 'companydata-company-lookup' ),
 			'callback'               => array( __CLASS__, 'export' ),
 		);
 		return $exporters;
 	}
 
 	public static function register_eraser( array $erasers ): array {
-		$erasers['companydata-for-woocommerce'] = array(
-			'eraser_friendly_name' => __( 'CompanyData for WooCommerce', 'companydata-for-woocommerce' ),
+		$erasers['companydata-company-lookup'] = array(
+			'eraser_friendly_name' => __( 'CompanyData Company Lookup', 'companydata-company-lookup' ),
 			'callback'             => array( __CLASS__, 'erase' ),
 		);
 		return $erasers;
@@ -44,11 +44,11 @@ class Privacy {
 			if ( $id || $reg ) {
 				$data[] = array(
 					'group_id'    => 'companydata',
-					'group_label' => __( 'Company register', 'companydata-for-woocommerce' ),
+					'group_label' => __( 'Company register', 'companydata-company-lookup' ),
 					'item_id'     => 'companydata-' . $user->ID,
 					'data'        => array(
-						array( 'name' => __( 'Registration number', 'companydata-for-woocommerce' ), 'value' => $reg ),
-						array( 'name' => __( 'CompanyData ID', 'companydata-for-woocommerce' ), 'value' => $id ),
+						array( 'name' => __( 'Registration number', 'companydata-company-lookup' ), 'value' => $reg ),
+						array( 'name' => __( 'CompanyData ID', 'companydata-company-lookup' ), 'value' => $id ),
 					),
 				);
 			}

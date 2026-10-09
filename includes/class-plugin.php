@@ -40,6 +40,6 @@ final class Plugin {
 		if ( ! current_user_can( 'activate_plugins' ) ) {
 			return;
 		}
-		echo '<div class="notice notice-error"><p>' . esc_html__( 'CompanyData for WooCommerce needs WooCommerce to be installed and active.', 'companydata-for-woocommerce' ) . '</p></div>';
+		echo '<div class="notice notice-error"><p>' . esc_html__( 'CompanyData Company Lookup needs WooCommerce to be installed and active.', 'companydata-company-lookup' ) . '</p></div>';
 	}
 }

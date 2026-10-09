@@ -48,29 +48,29 @@ class REST {
 
 	public static function lookup( WP_REST_Request $req ) {
 		if ( ! Api_Client::is_connected() ) {
-			return self::error( 'companydata_not_connected', __( 'Company lookup is not connected.', 'companydata-for-woocommerce' ), 503 );
+			return self::error( 'companydata_not_connected', __( 'Company lookup is not connected.', 'companydata-company-lookup' ), 503 );
 		}
 		$q       = trim( (string) $req['q'] );
 		$country = (string) $req['country'];
 		if ( ! in_array( $country, allowed_countries(), true ) ) {
-			return self::error( 'companydata_country', __( 'Company lookup is not available for this country.', 'companydata-for-woocommerce' ), 400 );
+			return self::error( 'companydata_country', __( 'Company lookup is not available for this country.', 'companydata-company-lookup' ), 400 );
 		}
 		$min = (int) Settings::get( 'min_chars', 3 );
 		if ( mb_strlen( $q ) < $min || mb_strlen( $q ) > 80 ) {
 			return rest_ensure_response( array( 'data' => array(), 'warnings' => array() ) );
 		}
 		if ( ! consume_ip( 'lookup', (int) Settings::get( 'limit_ip_day', 200 ), DAY_IN_SECONDS ) ) {
-			return self::error( 'companydata_throttled', __( 'Too many lookups. Please fill in the address by hand.', 'companydata-for-woocommerce' ), 429 );
+			return self::error( 'companydata_throttled', __( 'Too many lookups. Please fill in the address by hand.', 'companydata-company-lookup' ), 429 );
 		}
 		if ( ! under_daily_cap() ) {
-			return self::error( 'companydata_cap', __( 'Company lookup has reached its daily limit.', 'companydata-for-woocommerce' ), 429 );
+			return self::error( 'companydata_cap', __( 'Company lookup has reached its daily limit.', 'companydata-company-lookup' ), 429 );
 		}
 		$res = Api_Client::search( $q, $country, (int) Settings::get( 'results', 8 ) );
 		if ( is_wp_error( $res ) ) {
 			$data   = (array) $res->get_error_data();
 			$status = (int) ( $data['status'] ?? 500 );
 			// A bad or exhausted key is the owner's problem, not the shopper's: never show it as 401.
-			return self::error( $res->get_error_code(), __( 'Company lookup is temporarily unavailable.', 'companydata-for-woocommerce' ), in_array( $status, array( 401, 403 ), true ) ? 503 : $status );
+			return self::error( $res->get_error_code(), __( 'Company lookup is temporarily unavailable.', 'companydata-company-lookup' ), in_array( $status, array( 401, 403 ), true ) ? 503 : $status );
 		}
 		return rest_ensure_response( array( 'data' => $res['records'], 'warnings' => $res['warnings'] ) );
 	}

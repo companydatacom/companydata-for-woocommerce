@@ -60,12 +60,12 @@ class Checkout {
 			'regField'  => 'hidden' !== Settings::get( 'registration_field', 'hidden' ),
 			'credit'    => credit_html(),
 			'i18n'      => array(
-				'label'       => __( 'Company suggestions', 'companydata-for-woocommerce' ),
-				'filled'      => __( 'Address filled in from the company register. Please check it.', 'companydata-for-woocommerce' ),
-				'noMatch'     => __( 'No company found. You can type the address yourself.', 'companydata-for-woocommerce' ),
-				'other'       => __( 'Registered in another country', 'companydata-for-woocommerce' ),
-				'unavailable' => __( 'Company lookup is unavailable right now. Please type the address.', 'companydata-for-woocommerce' ),
-				'reg'         => __( 'reg.', 'companydata-for-woocommerce' ),
+				'label'       => __( 'Company suggestions', 'companydata-company-lookup' ),
+				'filled'      => __( 'Address filled in from the company register. Please check it.', 'companydata-company-lookup' ),
+				'noMatch'     => __( 'No company found. You can type the address yourself.', 'companydata-company-lookup' ),
+				'other'       => __( 'Registered in another country', 'companydata-company-lookup' ),
+				'unavailable' => __( 'Company lookup is unavailable right now. Please type the address.', 'companydata-company-lookup' ),
+				'reg'         => __( 'reg.', 'companydata-company-lookup' ),
 			),
 		) ) . ';', 'before' );
 	}
@@ -91,8 +91,8 @@ class Checkout {
 			return $fields;
 		}
 		$fields['billing']['billing_company_registration'] = array(
-			'label'        => __( 'Company registration number', 'companydata-for-woocommerce' ),
-			'placeholder'  => __( 'KvK, Companies House, SIREN...', 'companydata-for-woocommerce' ),
+			'label'        => __( 'Company registration number', 'companydata-company-lookup' ),
+			'placeholder'  => __( 'KvK, Companies House, SIREN...', 'companydata-company-lookup' ),
 			'required'     => 'required' === $mode,
 			'class'        => array( 'form-row-wide', 'companydata-registration' ),
 			'autocomplete' => 'off',
@@ -166,12 +166,12 @@ class Checkout {
 		if ( '' === $id && '' === $reg ) {
 			return;
 		}
-		echo '<p class="companydata-order-meta"><strong>' . esc_html__( 'Company register', 'companydata-for-woocommerce' ) . '</strong><br>';
+		echo '<p class="companydata-order-meta"><strong>' . esc_html__( 'Company register', 'companydata-company-lookup' ) . '</strong><br>';
 		if ( '' !== $reg ) {
-			echo esc_html__( 'Registration number:', 'companydata-for-woocommerce' ) . ' <code>' . esc_html( $reg ) . '</code><br>';
+			echo esc_html__( 'Registration number:', 'companydata-company-lookup' ) . ' <code>' . esc_html( $reg ) . '</code><br>';
 		}
 		if ( '' !== $id ) {
-			echo esc_html__( 'CompanyData ID:', 'companydata-for-woocommerce' ) . ' <code>' . esc_html( $id ) . '</code>';
+			echo esc_html__( 'CompanyData ID:', 'companydata-company-lookup' ) . ' <code>' . esc_html( $id ) . '</code>';
 		}
 		echo '</p>';
 	}
@@ -186,10 +186,10 @@ class Checkout {
 			return;
 		}
 		?>
-		<h2><?php esc_html_e( 'Company register', 'companydata-for-woocommerce' ); ?></h2>
+		<h2><?php esc_html_e( 'Company register', 'companydata-company-lookup' ); ?></h2>
 		<table class="form-table" role="presentation">
-			<tr><th><?php esc_html_e( 'Registration number', 'companydata-for-woocommerce' ); ?></th><td><code><?php echo esc_html( $reg ?: '-' ); ?></code></td></tr>
-			<tr><th><?php esc_html_e( 'CompanyData ID', 'companydata-for-woocommerce' ); ?></th><td><code><?php echo esc_html( $id ?: '-' ); ?></code></td></tr>
+			<tr><th><?php esc_html_e( 'Registration number', 'companydata-company-lookup' ); ?></th><td><code><?php echo esc_html( $reg ?: '-' ); ?></code></td></tr>
+			<tr><th><?php esc_html_e( 'CompanyData ID', 'companydata-company-lookup' ); ?></th><td><code><?php echo esc_html( $id ?: '-' ); ?></code></td></tr>
 		</table>
 		<?php
 	}

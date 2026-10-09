@@ -1,4 +1,4 @@
-# CompanyData for WooCommerce
+# CompanyData Company Lookup
 
 Customers type their company name or registration number at the WooCommerce
 checkout and the billing address fills itself from the
@@ -26,7 +26,7 @@ so a checkout costs one search and no export credit.
 ## Layout
 
 ```
-companydata-for-woocommerce.php   bootstrap, WooCommerce feature compatibility
+companydata-company-lookup.php   bootstrap, WooCommerce feature compatibility
 uninstall.php                     removes options; order/customer meta only if opted in
 includes/
   class-plugin.php      wiring, WooCommerce-missing notice
@@ -59,8 +59,8 @@ Run [Plugin Check](https://wordpress.org/plugins/plugin-check/) before a release
 
 ## Releasing
 
-1. Bump `Version` in `companydata-for-woocommerce.php` and `COMPANYDATA_WC_VERSION`, and `Stable tag` + changelog in `readme.txt`.
-2. `git archive --format=zip --prefix=companydata-for-woocommerce/ -o companydata-for-woocommerce.zip HEAD`
+1. Bump `Version` in `companydata-company-lookup.php` and `COMPANYDATA_WC_VERSION`, and `Stable tag` + changelog in `readme.txt`.
+2. `git archive --format=zip --prefix=companydata-company-lookup/ -o companydata-company-lookup.zip HEAD`
 
 ## License
 

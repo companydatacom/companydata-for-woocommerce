@@ -143,5 +143,5 @@ function credit_html(): string {
 	if ( ! Settings::get( 'credit_link', 0 ) ) {
 		return '';
 	}
-	return '<p class="companydata-credit"><a href="' . esc_url( site_url( '', array( 'utm_medium' => 'credit' ) ) ) . '" target="_blank" rel="noopener">' . esc_html__( 'Company lookup by CompanyData', 'companydata-for-woocommerce' ) . '</a></p>';
+	return '<p class="companydata-credit"><a href="' . esc_url( site_url( '', array( 'utm_medium' => 'credit' ) ) ) . '" target="_blank" rel="noopener">' . esc_html__( 'Company lookup by CompanyData', 'companydata-company-lookup' ) . '</a></p>';
 }

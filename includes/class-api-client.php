@@ -115,7 +115,7 @@ class Api_Client {
 	private static function request( string $path, array $query ) {
 		$key = Settings::api_key();
 		if ( '' === $key ) {
-			return new WP_Error( 'companydata_no_key', __( 'No CompanyData API key is configured.', 'companydata-for-woocommerce' ), array( 'status' => 503 ) );
+			return new WP_Error( 'companydata_no_key', __( 'No CompanyData API key is configured.', 'companydata-company-lookup' ), array( 'status' => 503 ) );
 		}
 		$url      = add_query_arg( array_map( 'rawurlencode', $query ), COMPANYDATA_WC_API_BASE . $path );
 		$response = wp_remote_get( $url, array(
@@ -156,7 +156,7 @@ class Api_Client {
 
 	private static function user_agent(): string {
 		global $wp_version;
-		return sprintf( 'companydata-woocommerce/%s (WP %s; WC %s)', COMPANYDATA_WC_VERSION, $wp_version, defined( 'WC_VERSION' ) ? WC_VERSION : '?' );
+		return sprintf( 'companydata-company-lookup/%s (WP %s; WC %s)', COMPANYDATA_WC_VERSION, $wp_version, defined( 'WC_VERSION' ) ? WC_VERSION : '?' );
 	}
 
 	/* ------------------------------------------------------- Local counters */

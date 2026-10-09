@@ -42,7 +42,7 @@ class Checkout_Blocks {
 		$schema = array();
 		foreach ( self::KEYS as $key ) {
 			$schema[ $key ] = array(
-				'description' => __( 'Company picked from the CompanyData lookup.', 'companydata-for-woocommerce' ),
+				'description' => __( 'Company picked from the CompanyData lookup.', 'companydata-company-lookup' ),
 				'type'        => array( 'string', 'null' ),
 				'context'     => array(),
 			);
@@ -65,8 +65,8 @@ class Checkout_Blocks {
 		}
 		woocommerce_register_additional_checkout_field( array(
 			'id'            => self::FIELD,
-			'label'         => __( 'Company registration number', 'companydata-for-woocommerce' ),
-			'optionalLabel' => __( 'Company registration number (optional)', 'companydata-for-woocommerce' ),
+			'label'         => __( 'Company registration number', 'companydata-company-lookup' ),
+			'optionalLabel' => __( 'Company registration number (optional)', 'companydata-company-lookup' ),
 			'location'      => 'address',
 			'required'      => 'required' === $mode,
 			'attributes'    => array( 'autocomplete' => 'off' ),

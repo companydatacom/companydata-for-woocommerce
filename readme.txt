@@ -1,4 +1,4 @@
-=== CompanyData for WooCommerce - Company Lookup & Address Autofill ===
+=== CompanyData - Company Lookup & Address Autofill ===
 Contributors: companydatacom
 Tags: woocommerce, b2b, company lookup, address autocomplete, kvk
 Requires at least: 6.4
