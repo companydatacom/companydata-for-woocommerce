@@ -2,6 +2,7 @@
 /**
  * Classic (shortcode) checkout: the script on the company field, the
  * optional registration-number field, and the order and customer meta.
+ * The block checkout adds to this in Checkout_Blocks.
  *
  * @package CompanyData_WC
  */
@@ -35,11 +36,19 @@ class Checkout {
 	/* ---------------------------------------------------------------- Front */
 
 	public static function assets(): void {
-		if ( ! function_exists( 'is_checkout' ) || ! is_checkout() || is_wc_endpoint_url( 'order-received' ) || ! Api_Client::is_connected() ) {
+		if ( ! function_exists( 'is_checkout' ) || is_wc_endpoint_url( 'order-received' ) || ! Api_Client::is_connected() ) {
+			return;
+		}
+		$blocks = has_block( 'woocommerce/checkout' );
+		if ( ! $blocks && ! is_checkout() ) {
 			return;
 		}
 		wp_enqueue_style( 'companydata-checkout', COMPANYDATA_WC_URL . 'assets/css/checkout.css', array(), COMPANYDATA_WC_VERSION );
-		wp_enqueue_script( 'companydata-checkout', COMPANYDATA_WC_URL . 'assets/js/checkout.js', array( 'jquery', 'wc-checkout' ), COMPANYDATA_WC_VERSION, true );
+		if ( $blocks ) {
+			wp_enqueue_script( 'companydata-checkout', COMPANYDATA_WC_URL . 'assets/js/checkout-blocks.js', array( 'wp-data', 'wc-settings' ), COMPANYDATA_WC_VERSION, true );
+		} else {
+			wp_enqueue_script( 'companydata-checkout', COMPANYDATA_WC_URL . 'assets/js/checkout.js', array( 'jquery', 'wc-checkout' ), COMPANYDATA_WC_VERSION, true );
+		}
 		wp_add_inline_script( 'companydata-checkout', 'window.companydataConfig = ' . wp_json_encode( array(
 			'restUrl'   => esc_url_raw( rest_url( REST::NS . '/lookup' ) ),
 			'nonce'     => wp_create_nonce( 'wp_rest' ),
@@ -62,9 +71,6 @@ class Checkout {
 	}
 
 	/**
-	 * Optional visible registration-number field under Company.
-	 */
-	/**
 	 * Lookups search the selected country, so ask for it before Company
 	 * (priority 30). Set on the default address fields so WooCommerce's
 	 * per-country reordering keeps it there.
@@ -76,6 +82,9 @@ class Checkout {
 		return $fields;
 	}
 
+	/**
+	 * Optional visible registration-number field under Company.
+	 */
 	public static function fields( array $fields ): array {
 		$mode = (string) Settings::get( 'registration_field', 'hidden' );
 		if ( 'hidden' === $mode || ! isset( $fields['billing']['billing_company'] ) ) {

@@ -106,7 +106,6 @@ class Admin {
 		$test      = get_transient( 'companydata_test_' . get_current_user_id() );
 		delete_transient( 'companydata_test_' . get_current_user_id() );
 		$company_hidden = 'hidden' === get_option( 'woocommerce_checkout_company_field', 'optional' );
-		$block_checkout = class_exists( 'WC_Blocks_Utils' ) && \WC_Blocks_Utils::has_block_in_page( wc_get_page_id( 'checkout' ), 'woocommerce/checkout' );
 		?>
 		<?php if ( is_array( $test ) ) : ?>
 			<div class="notice <?php echo $test['ok'] ? 'notice-success' : 'notice-error'; ?> inline"><p>
@@ -121,12 +120,6 @@ class Admin {
 			}
 			?>
 			</p></div>
-		<?php endif; ?>
-		<?php if ( $block_checkout ) : ?>
-			<div class="notice notice-warning inline"><p><?php
-				/* translators: %s: WooCommerce docs URL */
-				echo wp_kses_post( sprintf( __( 'Your checkout page uses the block-based checkout, which this version does not support. Switch the page to the classic <code>[woocommerce_checkout]</code> shortcode (<a href="%s" target="_blank" rel="noopener">how</a>) or wait for block support.', 'companydata-for-woocommerce' ), 'https://woocommerce.com/document/cart-checkout-blocks-status/' ) );
-			?></p></div>
 		<?php endif; ?>
 		<?php if ( $company_hidden ) : ?>
 			<div class="notice notice-warning inline"><p><?php
@@ -205,7 +198,8 @@ class Admin {
 					<p class="description"><?php esc_html_e( 'The company name always fills in. Phone and email are not available from the lookup.', 'companydata-for-woocommerce' ); ?></p>
 					</fieldset></td></tr>
 				<tr><th scope="row"><?php esc_html_e( 'Shipping address', 'companydata-for-woocommerce' ); ?></th>
-					<td><label><input type="checkbox" name="<?php echo esc_attr( $name ); ?>[shipping]" value="1" <?php checked( $s['shipping'] ); ?>> <?php esc_html_e( 'Also offer the lookup on the shipping Company field', 'companydata-for-woocommerce' ); ?></label></td></tr>
+					<td><label><input type="checkbox" name="<?php echo esc_attr( $name ); ?>[shipping]" value="1" <?php checked( $s['shipping'] ); ?>> <?php esc_html_e( 'Also offer the lookup on the shipping Company field', 'companydata-for-woocommerce' ); ?></label>
+					<p class="description"><?php esc_html_e( 'Classic checkout only. The block checkout asks for the shipping address first and always offers the lookup there.', 'companydata-for-woocommerce' ); ?></p></td></tr>
 				<tr><th scope="row"><?php esc_html_e( 'Field order', 'companydata-for-woocommerce' ); ?></th>
 					<td><label><input type="checkbox" name="<?php echo esc_attr( $name ); ?>[country_first]" value="1" <?php checked( $s['country_first'] ); ?>> <?php esc_html_e( 'Ask for the country before the company name', 'companydata-for-woocommerce' ); ?></label>
 					<p class="description"><?php esc_html_e( 'The lookup searches the selected country, so customers get the right suggestions from the first letter.', 'companydata-for-woocommerce' ); ?></p></td></tr>

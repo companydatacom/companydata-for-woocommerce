@@ -2,7 +2,7 @@
 /**
  * Plugin Name:       CompanyData for WooCommerce - Company Lookup & Address Autofill
  * Plugin URI:        https://github.com/companydatacom/companydata-for-woocommerce
- * Description:       Customers type their company name or registration number at checkout and the billing address fills itself from 400M+ company records. The registration number is saved on the order.
+ * Description:       Customers type their company name or registration number at checkout and the billing address fills itself from 345M+ company records. The registration number is saved on the order.
  * Version:           0.1.0
  * Requires at least: 6.4
  * Requires PHP:      8.0
@@ -32,15 +32,16 @@ require_once COMPANYDATA_WC_DIR . 'includes/class-settings.php';
 require_once COMPANYDATA_WC_DIR . 'includes/class-api-client.php';
 require_once COMPANYDATA_WC_DIR . 'includes/class-rest.php';
 require_once COMPANYDATA_WC_DIR . 'includes/class-checkout.php';
+require_once COMPANYDATA_WC_DIR . 'includes/class-checkout-blocks.php';
 require_once COMPANYDATA_WC_DIR . 'includes/class-privacy.php';
 require_once COMPANYDATA_WC_DIR . 'includes/class-admin.php';
 require_once COMPANYDATA_WC_DIR . 'includes/class-plugin.php';
 
-// WooCommerce feature compatibility: HPOS yes; the block checkout is not supported in this version.
+// WooCommerce feature compatibility: HPOS and the block checkout.
 add_action( 'before_woocommerce_init', function () {
 	if ( class_exists( '\Automattic\WooCommerce\Utilities\FeaturesUtil' ) ) {
 		\Automattic\WooCommerce\Utilities\FeaturesUtil::declare_compatibility( 'custom_order_tables', __FILE__, true );
-		\Automattic\WooCommerce\Utilities\FeaturesUtil::declare_compatibility( 'cart_checkout_blocks', __FILE__, false );
+		\Automattic\WooCommerce\Utilities\FeaturesUtil::declare_compatibility( 'cart_checkout_blocks', __FILE__, true );
 	}
 } );
 

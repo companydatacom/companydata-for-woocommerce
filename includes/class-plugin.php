@@ -29,6 +29,7 @@ final class Plugin {
 		}
 		REST::init();
 		Checkout::init();
+		Checkout_Blocks::init();
 		Privacy::init();
 		if ( is_admin() ) {
 			Admin::init();

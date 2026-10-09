@@ -12,7 +12,7 @@ Company name or registration number in, billing address out. Customers pick thei
 
 == Description ==
 
-B2B checkouts ask for a company name and then make the customer type the address that the company register already holds. This plugin turns the WooCommerce Company field into a lookup: start typing a company name, or paste a registration number (KvK, Companies House, SIREN and 1,200+ other registers), pick the company, and the street, postcode, city, state and country fill in from the [CompanyData](https://companydata.com/) database of 400M+ companies in 200+ countries.
+B2B checkouts ask for a company name and then make the customer type the address that the company register already holds. This plugin turns the WooCommerce Company field into a lookup: start typing a company name, or paste a registration number (KvK, Companies House, SIREN and 1,200+ other registers), pick the company, and the street, postcode, city, state and country fill in from the [CompanyData](https://companydata.com/) database of 345M+ companies in 200+ countries.
 
 **For the customer**
 
@@ -34,9 +34,9 @@ B2B checkouts ask for a company name and then make the customer type the address
 
 The lookup runs on the [CompanyData API](https://companydata.com/apis/). You need an API key; the trial needs no credit card. Each completed lookup at checkout uses one search from your plan, and nothing else: the address comes with the search result, so no credits are spent.
 
-**Supported checkout**
+**Works with both checkouts**
 
-This version works with the classic (shortcode) checkout, `[woocommerce_checkout]`. Support for the block-based checkout is planned; the settings screen tells you which one your shop uses.
+The block-based checkout (the default for new shops) and the classic `[woocommerce_checkout]` shortcode checkout.
 
 == External services ==
 
@@ -65,7 +65,7 @@ The optional "Company lookup by CompanyData" line under the field is off by defa
 
 = Does it work with the block-based checkout? =
 
-Not yet. This version supports the classic checkout page with the `[woocommerce_checkout]` shortcode. The settings screen warns you if your checkout page uses the block.
+Yes, and with the classic shortcode checkout. In the block checkout the shipping address comes first and the lookup works there and on a separate billing address. The optional registration-number field appears at the end of the address form, where WooCommerce places extra fields.
 
 = Which countries and registers are covered? =
 
@@ -97,4 +97,4 @@ As order meta (`_companydata_registration` and `_companydata_id`), visible on th
 == Changelog ==
 
 = 0.1.0 =
-* First release: company lookup and address fill on the classic checkout, registration-number field, order and customer meta, usage screen, privacy tools.
+* First release: company lookup and address fill on the block and classic checkouts, registration-number field, order and customer meta, usage screen, privacy tools.
