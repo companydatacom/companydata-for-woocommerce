@@ -57,7 +57,7 @@ Run [Plugin Check](https://wordpress.org/plugins/plugin-check/) before a release
 
 ## Releasing
 
-1. Bump `Version` in `companydata-for-woocommerce.php` and `CDWC_VERSION`, and `Stable tag` + changelog in `readme.txt`.
+1. Bump `Version` in `companydata-for-woocommerce.php` and `COMPANYDATA_WC_VERSION`, and `Stable tag` + changelog in `readme.txt`.
 2. `git archive --format=zip --prefix=companydata-for-woocommerce/ -o companydata-for-woocommerce.zip HEAD`
 
 ## License

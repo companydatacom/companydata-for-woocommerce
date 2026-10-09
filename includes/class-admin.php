@@ -18,10 +18,10 @@ class Admin {
 	public static function init(): void {
 		add_action( 'admin_menu', array( __CLASS__, 'menu' ), 60 );
 		add_action( 'admin_init', array( __CLASS__, 'register_settings' ) );
-		add_filter( 'option_page_capability_cdwc', fn() => 'manage_woocommerce' );
-		add_filter( 'plugin_action_links_' . plugin_basename( CDWC_FILE ), array( __CLASS__, 'action_links' ) );
+		add_filter( 'option_page_capability_companydata', fn() => 'manage_woocommerce' );
+		add_filter( 'plugin_action_links_' . plugin_basename( COMPANYDATA_WC_FILE ), array( __CLASS__, 'action_links' ) );
 		add_action( 'admin_enqueue_scripts', array( __CLASS__, 'assets' ) );
-		add_action( 'admin_post_cdwc_test', array( __CLASS__, 'test_connection' ) );
+		add_action( 'admin_post_companydata_test', array( __CLASS__, 'test_connection' ) );
 		add_action( 'admin_notices', array( __CLASS__, 'connect_notice' ) );
 	}
 
@@ -30,7 +30,7 @@ class Admin {
 	}
 
 	public static function register_settings(): void {
-		register_setting( 'cdwc', Settings::OPTION, array(
+		register_setting( 'companydata', Settings::OPTION, array(
 			'type'              => 'array',
 			'sanitize_callback' => array( 'CompanyData_WC\\Settings', 'sanitize' ),
 		) );
@@ -47,7 +47,7 @@ class Admin {
 
 	public static function assets( string $hook ): void {
 		if ( false !== strpos( $hook, self::PAGE ) ) {
-			wp_enqueue_style( 'cdwc-admin', CDWC_URL . 'assets/css/admin.css', array(), CDWC_VERSION );
+			wp_enqueue_style( 'companydata-admin', COMPANYDATA_WC_URL . 'assets/css/admin.css', array(), COMPANYDATA_WC_VERSION );
 		}
 	}
 
@@ -59,23 +59,23 @@ class Admin {
 		if ( Api_Client::is_connected() || ! current_user_can( 'manage_woocommerce' ) || ! $screen || false === strpos( (string) $screen->id, 'woocommerce' ) || false !== strpos( (string) $screen->id, self::PAGE ) ) {
 			return;
 		}
-		echo '<div class="notice notice-info"><p>' . sprintf(
+		echo '<div class="notice notice-info"><p>' . wp_kses_post( sprintf(
 			/* translators: 1: settings URL, 2: signup URL */
-			wp_kses_post( __( '<strong>CompanyData for WooCommerce</strong> is active but has no API key yet. <a href="%1$s">Connect a key</a> or <a href="%2$s" target="_blank" rel="noopener">start a free trial</a>.', 'companydata-for-woocommerce' ) ),
+			__( '<strong>CompanyData for WooCommerce</strong> is active but has no API key yet. <a href="%1$s">Connect a key</a> or <a href="%2$s" target="_blank" rel="noopener">start a free trial</a>.', 'companydata-for-woocommerce' ),
 			esc_url( self::url() ),
 			esc_url( 'https://app.companydata.com/signup-api?source=wordpress-plugin' )
-		) . '</p></div>';
+		) ) . '</p></div>';
 	}
 
 	/* ------------------------------------------------------------- Actions */
 
 	public static function test_connection(): void {
-		check_admin_referer( 'cdwc_test' );
+		check_admin_referer( 'companydata_test' );
 		if ( ! current_user_can( 'manage_woocommerce' ) ) {
 			wp_die( esc_html__( 'Not allowed.', 'companydata-for-woocommerce' ) );
 		}
 		$res = Api_Client::test();
-		set_transient( 'cdwc_test_' . get_current_user_id(), is_wp_error( $res ) ? array( 'ok' => false, 'error' => $res->get_error_message(), 'code' => $res->get_error_code() ) : array( 'ok' => true ), MINUTE_IN_SECONDS );
+		set_transient( 'companydata_test_' . get_current_user_id(), is_wp_error( $res ) ? array( 'ok' => false, 'error' => $res->get_error_message(), 'code' => $res->get_error_code() ) : array( 'ok' => true ), MINUTE_IN_SECONDS );
 		wp_safe_redirect( self::url() );
 		exit;
 	}
@@ -88,7 +88,7 @@ class Admin {
 		}
 		$tab = isset( $_GET['tab'] ) ? sanitize_key( wp_unslash( $_GET['tab'] ) ) : 'settings'; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 		?>
-		<div class="wrap cdwc-admin">
+		<div class="wrap companydata-admin">
 			<h1><?php esc_html_e( 'CompanyData for WooCommerce', 'companydata-for-woocommerce' ); ?></h1>
 			<nav class="nav-tab-wrapper">
 				<a class="nav-tab <?php echo 'settings' === $tab ? 'nav-tab-active' : ''; ?>" href="<?php echo esc_url( self::url() ); ?>"><?php esc_html_e( 'Settings', 'companydata-for-woocommerce' ); ?></a>
@@ -103,8 +103,8 @@ class Admin {
 		$s         = Settings::all();
 		$name      = Settings::OPTION;
 		$connected = Api_Client::is_connected();
-		$test      = get_transient( 'cdwc_test_' . get_current_user_id() );
-		delete_transient( 'cdwc_test_' . get_current_user_id() );
+		$test      = get_transient( 'companydata_test_' . get_current_user_id() );
+		delete_transient( 'companydata_test_' . get_current_user_id() );
 		$company_hidden = 'hidden' === get_option( 'woocommerce_checkout_company_field', 'optional' );
 		$block_checkout = class_exists( 'WC_Blocks_Utils' ) && \WC_Blocks_Utils::has_block_in_page( wc_get_page_id( 'checkout' ), 'woocommerce/checkout' );
 		?>
@@ -115,7 +115,7 @@ class Admin {
 				esc_html_e( 'Connected. The API answered a test search.', 'companydata-for-woocommerce' );
 			} else {
 				echo esc_html__( 'Test failed:', 'companydata-for-woocommerce' ) . ' ' . esc_html( $test['error'] );
-				if ( 'cdwc_bad_key' === $test['code'] ) {
+				if ( 'companydata_bad_key' === $test['code'] ) {
 					echo ' ' . esc_html__( 'Check the key in your CompanyData dashboard.', 'companydata-for-woocommerce' );
 				}
 			}
@@ -136,24 +136,24 @@ class Admin {
 		<?php endif; ?>
 
 		<form method="post" action="options.php">
-			<?php settings_fields( 'cdwc' ); ?>
+			<?php settings_fields( 'companydata' ); ?>
 
 			<h2><?php esc_html_e( 'API connection', 'companydata-for-woocommerce' ); ?></h2>
-			<div class="cdwc-card">
+			<div class="companydata-card">
 				<?php if ( $connected ) : ?>
-					<p class="cdwc-status cdwc-status-ok"><span class="dashicons dashicons-yes-alt"></span> <?php esc_html_e( 'Key saved', 'companydata-for-woocommerce' ); ?> <code><?php echo esc_html( Settings::masked_key() ); ?></code>
+					<p class="companydata-status companydata-status-ok"><span class="dashicons dashicons-yes-alt"></span> <?php esc_html_e( 'Key saved', 'companydata-for-woocommerce' ); ?> <code><?php echo esc_html( Settings::masked_key() ); ?></code>
 						<?php if ( Settings::has_constant_key() ) : ?><em><?php esc_html_e( '(set via COMPANYDATA_API_KEY in wp-config.php)', 'companydata-for-woocommerce' ); ?></em><?php endif; ?>
 					</p>
 				<?php else : ?>
-					<p class="cdwc-status"><span class="dashicons dashicons-marker"></span> <?php esc_html_e( 'Not connected. Company lookup stays off until a key is saved; checkout works as normal.', 'companydata-for-woocommerce' ); ?></p>
+					<p class="companydata-status"><span class="dashicons dashicons-marker"></span> <?php esc_html_e( 'Not connected. Company lookup stays off until a key is saved; checkout works as normal.', 'companydata-for-woocommerce' ); ?></p>
 					<p><a class="button button-primary" target="_blank" rel="noopener" href="https://app.companydata.com/signup-api?source=wordpress-plugin"><?php esc_html_e( 'Get a free CompanyData API key', 'companydata-for-woocommerce' ); ?></a>
 					<span class="description"><?php esc_html_e( 'The trial needs no credit card. Each completed lookup at checkout uses one search from your plan.', 'companydata-for-woocommerce' ); ?></span></p>
 				<?php endif; ?>
 				<?php if ( ! Settings::has_constant_key() ) : ?>
 				<table class="form-table" role="presentation">
-					<tr><th scope="row"><label for="cdwc-api-key"><?php esc_html_e( 'API key', 'companydata-for-woocommerce' ); ?></label></th>
-						<td><input type="password" id="cdwc-api-key" name="<?php echo esc_attr( $name ); ?>[api_key]" class="regular-text" autocomplete="off" placeholder="<?php echo $connected ? esc_attr__( 'Leave empty to keep the current key', 'companydata-for-woocommerce' ) : ''; ?>">
-						<?php if ( $connected ) : ?><label class="cdwc-inline"><input type="checkbox" name="<?php echo esc_attr( $name ); ?>[clear_api_key]" value="1"> <?php esc_html_e( 'Disconnect', 'companydata-for-woocommerce' ); ?></label><?php endif; ?>
+					<tr><th scope="row"><label for="companydata-api-key"><?php esc_html_e( 'API key', 'companydata-for-woocommerce' ); ?></label></th>
+						<td><input type="password" id="companydata-api-key" name="<?php echo esc_attr( $name ); ?>[api_key]" class="regular-text" autocomplete="off" placeholder="<?php echo $connected ? esc_attr__( 'Leave empty to keep the current key', 'companydata-for-woocommerce' ) : ''; ?>">
+						<?php if ( $connected ) : ?><label class="companydata-inline"><input type="checkbox" name="<?php echo esc_attr( $name ); ?>[clear_api_key]" value="1"> <?php esc_html_e( 'Disconnect', 'companydata-for-woocommerce' ); ?></label><?php endif; ?>
 						<p class="description"><?php esc_html_e( 'Stored in this site\'s database, encrypted with your site\'s salts, and only ever sent from your server to app.companydata.com.', 'companydata-for-woocommerce' ); ?></p></td></tr>
 				</table>
 				<?php endif; ?>
@@ -170,7 +170,7 @@ class Admin {
 						<p class="description"><?php esc_html_e( 'The lookup searches the country the customer selected on the checkout. Two-letter codes.', 'companydata-for-woocommerce' ); ?></p>
 					</fieldset></td></tr>
 				<tr><th scope="row"><?php esc_html_e( 'Behaviour', 'companydata-for-woocommerce' ); ?></th>
-					<td class="cdwc-limits">
+					<td class="companydata-limits">
 						<label><?php esc_html_e( 'Start after', 'companydata-for-woocommerce' ); ?> <input type="number" min="2" max="6" name="<?php echo esc_attr( $name ); ?>[min_chars]" value="<?php echo esc_attr( $s['min_chars'] ); ?>" class="small-text"> <?php esc_html_e( 'characters', 'companydata-for-woocommerce' ); ?></label>
 						<label><?php esc_html_e( 'Wait', 'companydata-for-woocommerce' ); ?> <input type="number" min="150" max="1500" step="50" name="<?php echo esc_attr( $name ); ?>[debounce_ms]" value="<?php echo esc_attr( $s['debounce_ms'] ); ?>" class="small-text"> <?php esc_html_e( 'ms after typing stops', 'companydata-for-woocommerce' ); ?></label>
 						<label><?php esc_html_e( 'Show', 'companydata-for-woocommerce' ); ?> <input type="number" min="3" max="20" name="<?php echo esc_attr( $name ); ?>[results]" value="<?php echo esc_attr( $s['results'] ); ?>" class="small-text"> <?php esc_html_e( 'suggestions', 'companydata-for-woocommerce' ); ?></label>
@@ -178,7 +178,7 @@ class Admin {
 						<p class="description"><?php esc_html_e( 'Each request to the API uses one search from your plan. A longer wait and a higher character minimum mean fewer searches per customer; cached text costs nothing.', 'companydata-for-woocommerce' ); ?></p>
 					</td></tr>
 				<tr><th scope="row"><?php esc_html_e( 'Limits', 'companydata-for-woocommerce' ); ?></th>
-					<td class="cdwc-limits">
+					<td class="companydata-limits">
 						<label><?php esc_html_e( 'Lookups per visitor per day', 'companydata-for-woocommerce' ); ?> <input type="number" min="0" name="<?php echo esc_attr( $name ); ?>[limit_ip_day]" value="<?php echo esc_attr( $s['limit_ip_day'] ); ?>" class="small-text"></label>
 						<label><?php esc_html_e( 'Searches per day, whole site', 'companydata-for-woocommerce' ); ?> <input type="number" min="0" name="<?php echo esc_attr( $name ); ?>[daily_cap]" value="<?php echo esc_attr( $s['daily_cap'] ); ?>" class="small-text"></label>
 						<p class="description"><?php esc_html_e( '0 = no limit. When a limit is reached the lookup switches off quietly and customers type their address as usual.', 'companydata-for-woocommerce' ); ?></p>
@@ -188,7 +188,7 @@ class Admin {
 			<h2><?php esc_html_e( 'Checkout', 'companydata-for-woocommerce' ); ?></h2>
 			<table class="form-table" role="presentation">
 				<tr><th scope="row"><?php esc_html_e( 'Fill in', 'companydata-for-woocommerce' ); ?></th>
-					<td><fieldset class="cdwc-fields">
+					<td><fieldset class="companydata-fields">
 					<?php
 					$labels = array(
 						'address_1' => __( 'Street address', 'companydata-for-woocommerce' ),
@@ -227,9 +227,9 @@ class Admin {
 		</form>
 
 		<?php if ( $connected ) : ?>
-		<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" class="cdwc-test">
-			<input type="hidden" name="action" value="cdwc_test">
-			<?php wp_nonce_field( 'cdwc_test' ); ?>
+		<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" class="companydata-test">
+			<input type="hidden" name="action" value="companydata_test">
+			<?php wp_nonce_field( 'companydata_test' ); ?>
 			<?php submit_button( __( 'Test connection', 'companydata-for-woocommerce' ), 'secondary', 'submit', false ); ?>
 			<span class="description"><?php esc_html_e( 'Runs one small search against the API.', 'companydata-for-woocommerce' ); ?></span>
 		</form>
@@ -242,13 +242,13 @@ class Admin {
 		krsort( $counters );
 		$counters = array_slice( $counters, 0, 30, true );
 		?>
-		<div class="cdwc-card">
+		<div class="companydata-card">
 			<h2><?php esc_html_e( 'API searches sent by this site', 'companydata-for-woocommerce' ); ?></h2>
 			<p class="description"><?php esc_html_e( 'Counted when a request actually reaches the API. Cached lookups are free and not counted. Your plan\'s allowance and remaining balance are in the CompanyData dashboard.', 'companydata-for-woocommerce' ); ?></p>
 			<?php if ( ! $counters ) : ?>
 				<p><?php esc_html_e( 'No lookups yet.', 'companydata-for-woocommerce' ); ?></p>
 			<?php else : ?>
-			<table class="widefat striped cdwc-usage"><thead><tr>
+			<table class="widefat striped companydata-usage"><thead><tr>
 				<th><?php esc_html_e( 'Day', 'companydata-for-woocommerce' ); ?></th><th><?php esc_html_e( 'Name searches', 'companydata-for-woocommerce' ); ?></th><th><?php esc_html_e( 'Number lookups', 'companydata-for-woocommerce' ); ?></th>
 			</tr></thead><tbody>
 			<?php foreach ( $counters as $day => $c ) : ?>

@@ -15,7 +15,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Build a companydata.com URL with plugin attribution.
  */
 function site_url( string $path, array $extra = array() ): string {
-	return add_query_arg( array_merge( array( 'utm_source' => 'wordpress-plugin', 'utm_medium' => 'plugin' ), $extra ), CDWC_SITE . '/' . ltrim( $path, '/' ) );
+	return add_query_arg( array_merge( array( 'utm_source' => 'wordpress-plugin', 'utm_medium' => 'plugin' ), $extra ), COMPANYDATA_WC_SITE . '/' . ltrim( $path, '/' ) );
 }
 
 /**
@@ -112,7 +112,7 @@ function consume_ip( string $bucket, int $limit, int $window ): bool {
 	if ( $limit <= 0 ) {
 		return true;
 	}
-	$key   = 'cdwc_ip_' . $bucket . '_' . md5( client_ip() ) . '_' . floor( time() / $window );
+	$key   = 'companydata_ip_' . $bucket . '_' . md5( client_ip() ) . '_' . floor( time() / $window );
 	$count = (int) get_transient( $key );
 	if ( $count >= $limit ) {
 		return false;
@@ -143,5 +143,5 @@ function credit_html(): string {
 	if ( ! Settings::get( 'credit_link', 0 ) ) {
 		return '';
 	}
-	return '<p class="cdwc-credit"><a href="' . esc_url( site_url( '', array( 'utm_medium' => 'credit' ) ) ) . '" target="_blank" rel="noopener">' . esc_html__( 'Company lookup by CompanyData', 'companydata-for-woocommerce' ) . '</a></p>';
+	return '<p class="companydata-credit"><a href="' . esc_url( site_url( '', array( 'utm_medium' => 'credit' ) ) ) . '" target="_blank" rel="noopener">' . esc_html__( 'Company lookup by CompanyData', 'companydata-for-woocommerce' ) . '</a></p>';
 }

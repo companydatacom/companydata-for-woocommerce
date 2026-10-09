@@ -7,7 +7,7 @@
  * events (country_to_state_changed, update_checkout) that the fill relies on.
  */
 ( function ( $ ) {
-	const cfg = window.cdwcConfig || {};
+	const cfg = window.companydataConfig || {};
 	const t = cfg.i18n || {};
 	if ( ! cfg.restUrl ) return;
 
@@ -19,10 +19,10 @@
 	function attach( input, type ) {
 		const $input = $( input );
 		const wrap = $input.closest( '.woocommerce-input-wrapper' ).length ? $input.closest( '.woocommerce-input-wrapper' ) : $input.parent();
-		const list = $( '<ul class="cdwc-results" role="listbox" hidden></ul>' ).attr( 'aria-label', t.label || 'Company suggestions' );
-		const note = $( '<p class="cdwc-note" role="status" hidden></p>' );
-		wrap.addClass( 'cdwc-wrap' ).append( list, note );
-		$input.attr( { autocomplete: 'off', 'aria-autocomplete': 'list', 'aria-expanded': 'false', 'aria-controls': list.attr( 'id', 'cdwc-' + type + '-' + Math.random().toString( 36 ).slice( 2, 8 ) ).attr( 'id' ) } );
+		const list = $( '<ul class="companydata-results" role="listbox" hidden></ul>' ).attr( 'aria-label', t.label || 'Company suggestions' );
+		const note = $( '<p class="companydata-note" role="status" hidden></p>' );
+		wrap.addClass( 'companydata-wrap' ).append( list, note );
+		$input.attr( { autocomplete: 'off', 'aria-autocomplete': 'list', 'aria-expanded': 'false', 'aria-controls': list.attr( 'id', 'companydata-' + type + '-' + Math.random().toString( 36 ).slice( 2, 8 ) ).attr( 'id' ) } );
 
 		let timer = null;
 		let controller = null;
@@ -55,9 +55,9 @@
 				const li = $( '<li role="option"></li>' ).attr( { id: list.attr( 'id' ) + '-' + i, 'aria-selected': 'false' } );
 				li.append( $( '<strong></strong>' ).text( r.name ) );
 				const addr = [ r.address_1, [ r.postcode, r.city ].filter( Boolean ).join( ' ' ) ].filter( Boolean ).join( ', ' );
-				if ( addr ) li.append( $( '<span class="cdwc-addr"></span>' ).text( addr ) );
-				if ( r.registration ) li.append( $( '<span class="cdwc-reg"></span>' ).text( ( t.reg || 'reg.' ) + ' ' + r.registration ) );
-				if ( foreign && r.country !== country() ) li.append( $( '<span class="cdwc-foreign"></span>' ).text( ( t.other || 'Registered in another country' ) + ': ' + ( r.countryName || r.country ) ) );
+				if ( addr ) li.append( $( '<span class="companydata-addr"></span>' ).text( addr ) );
+				if ( r.registration ) li.append( $( '<span class="companydata-reg"></span>' ).text( ( t.reg || 'reg.' ) + ' ' + r.registration ) );
+				if ( foreign && r.country !== country() ) li.append( $( '<span class="companydata-foreign"></span>' ).text( ( t.other || 'Registered in another country' ) + ': ' + ( r.countryName || r.country ) ) );
 				li.on( 'mousedown', ( ev ) => ev.preventDefault() ); // keep focus on the input
 				li.on( 'click', () => pick( i ) );
 				list.append( li );

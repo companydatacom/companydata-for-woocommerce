@@ -37,9 +37,9 @@ class Checkout {
 		if ( ! function_exists( 'is_checkout' ) || ! is_checkout() || is_wc_endpoint_url( 'order-received' ) || ! Api_Client::is_connected() ) {
 			return;
 		}
-		wp_enqueue_style( 'cdwc-checkout', CDWC_URL . 'assets/css/checkout.css', array(), CDWC_VERSION );
-		wp_enqueue_script( 'cdwc-checkout', CDWC_URL . 'assets/js/checkout.js', array( 'jquery', 'wc-checkout' ), CDWC_VERSION, true );
-		wp_add_inline_script( 'cdwc-checkout', 'window.cdwcConfig = ' . wp_json_encode( array(
+		wp_enqueue_style( 'companydata-checkout', COMPANYDATA_WC_URL . 'assets/css/checkout.css', array(), COMPANYDATA_WC_VERSION );
+		wp_enqueue_script( 'companydata-checkout', COMPANYDATA_WC_URL . 'assets/js/checkout.js', array( 'jquery', 'wc-checkout' ), COMPANYDATA_WC_VERSION, true );
+		wp_add_inline_script( 'companydata-checkout', 'window.companydataConfig = ' . wp_json_encode( array(
 			'restUrl'   => esc_url_raw( rest_url( REST::NS . '/lookup' ) ),
 			'nonce'     => wp_create_nonce( 'wp_rest' ),
 			'countries' => allowed_countries(),
@@ -72,7 +72,7 @@ class Checkout {
 			'label'        => __( 'Company registration number', 'companydata-for-woocommerce' ),
 			'placeholder'  => __( 'KvK, Companies House, SIREN...', 'companydata-for-woocommerce' ),
 			'required'     => 'required' === $mode,
-			'class'        => array( 'form-row-wide', 'cdwc-registration' ),
+			'class'        => array( 'form-row-wide', 'companydata-registration' ),
 			'autocomplete' => 'off',
 			'priority'     => (int) ( $fields['billing']['billing_company']['priority'] ?? 30 ) + 1,
 		);
@@ -90,8 +90,8 @@ class Checkout {
 	}
 
 	private static function hidden( string $type ): void {
-		echo '<input type="hidden" name="companydata_' . esc_attr( $type ) . '_id" class="cdwc-id" value="">';
-		echo '<input type="hidden" name="companydata_' . esc_attr( $type ) . '_registration" class="cdwc-reg" value="">';
+		echo '<input type="hidden" name="companydata_' . esc_attr( $type ) . '_id" class="companydata-id" value="">';
+		echo '<input type="hidden" name="companydata_' . esc_attr( $type ) . '_registration" class="companydata-reg" value="">';
 	}
 
 	/* ---------------------------------------------------------------- Order */
@@ -144,7 +144,7 @@ class Checkout {
 		if ( '' === $id && '' === $reg ) {
 			return;
 		}
-		echo '<p class="cdwc-order-meta"><strong>' . esc_html__( 'Company register', 'companydata-for-woocommerce' ) . '</strong><br>';
+		echo '<p class="companydata-order-meta"><strong>' . esc_html__( 'Company register', 'companydata-for-woocommerce' ) . '</strong><br>';
 		if ( '' !== $reg ) {
 			echo esc_html__( 'Registration number:', 'companydata-for-woocommerce' ) . ' <code>' . esc_html( $reg ) . '</code><br>';
 		}

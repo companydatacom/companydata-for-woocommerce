@@ -46,7 +46,7 @@ class Api_Client {
 		}
 
 		$ttl       = (int) Settings::get( 'cache_days', 30 ) * DAY_IN_SECONDS;
-		$cache_key = 'cdwc_s_' . md5( wp_json_encode( $params ) );
+		$cache_key = 'companydata_s_' . md5( wp_json_encode( $params ) );
 		if ( $ttl > 0 ) {
 			$cached = get_transient( $cache_key );
 			if ( is_array( $cached ) ) {
@@ -115,9 +115,9 @@ class Api_Client {
 	private static function request( string $path, array $query ) {
 		$key = Settings::api_key();
 		if ( '' === $key ) {
-			return new WP_Error( 'cdwc_no_key', __( 'No CompanyData API key is configured.', 'companydata-for-woocommerce' ), array( 'status' => 503 ) );
+			return new WP_Error( 'companydata_no_key', __( 'No CompanyData API key is configured.', 'companydata-for-woocommerce' ), array( 'status' => 503 ) );
 		}
-		$url      = add_query_arg( array_map( 'rawurlencode', $query ), CDWC_API_BASE . $path );
+		$url      = add_query_arg( array_map( 'rawurlencode', $query ), COMPANYDATA_WC_API_BASE . $path );
 		$response = wp_remote_get( $url, array(
 			'timeout' => 10,
 			'headers' => array(
@@ -127,7 +127,7 @@ class Api_Client {
 			),
 		) );
 		if ( is_wp_error( $response ) ) {
-			return new WP_Error( 'cdwc_transport', $response->get_error_message(), array( 'status' => 502 ) );
+			return new WP_Error( 'companydata_transport', $response->get_error_message(), array( 'status' => 502 ) );
 		}
 		$status = (int) wp_remote_retrieve_response_code( $response );
 		$json   = json_decode( (string) wp_remote_retrieve_body( $response ), true );
@@ -137,13 +137,13 @@ class Api_Client {
 		if ( $status >= 200 && $status < 300 ) {
 			return $json;
 		}
-		$code = 'cdwc_upstream';
+		$code = 'companydata_upstream';
 		if ( 401 === $status ) {
-			$code = 'cdwc_bad_key';
+			$code = 'companydata_bad_key';
 		} elseif ( 403 === $status ) {
-			$code = 'cdwc_inactive';
+			$code = 'companydata_inactive';
 		} elseif ( 429 === $status ) {
-			$code = 'cdwc_quota';
+			$code = 'companydata_quota';
 		}
 		$data = array( 'status' => $status );
 		foreach ( array( 'upgradeUrl', 'resetsAt', 'subscriptionStatus' ) as $k ) {
@@ -156,7 +156,7 @@ class Api_Client {
 
 	private static function user_agent(): string {
 		global $wp_version;
-		return sprintf( 'companydata-woocommerce/%s (WP %s; WC %s)', CDWC_VERSION, $wp_version, defined( 'WC_VERSION' ) ? WC_VERSION : '?' );
+		return sprintf( 'companydata-woocommerce/%s (WP %s; WC %s)', COMPANYDATA_WC_VERSION, $wp_version, defined( 'WC_VERSION' ) ? WC_VERSION : '?' );
 	}
 
 	/* ------------------------------------------------------- Local counters */
@@ -176,11 +176,11 @@ class Api_Client {
 			}
 		}
 		$counters[ $day ][ $type ] = ( $counters[ $day ][ $type ] ?? 0 ) + 1;
-		update_option( 'cdwc_counters', $counters, false );
+		update_option( 'companydata_counters', $counters, false );
 	}
 
 	public static function counters(): array {
-		$c = get_option( 'cdwc_counters', array() );
+		$c = get_option( 'companydata_counters', array() );
 		return is_array( $c ) ? $c : array();
 	}
 }

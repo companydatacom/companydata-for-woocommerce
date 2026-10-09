@@ -14,8 +14,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 class Settings {
 
-	const OPTION     = 'cdwc_settings';
-	const KEY_OPTION = 'cdwc_api_key';
+	const OPTION     = 'companydata_settings';
+	const KEY_OPTION = 'companydata_api_key';
 
 	public static function defaults(): array {
 		return array(

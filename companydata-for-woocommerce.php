@@ -20,21 +20,21 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'CDWC_VERSION', '0.1.0' );
-define( 'CDWC_FILE', __FILE__ );
-define( 'CDWC_DIR', plugin_dir_path( __FILE__ ) );
-define( 'CDWC_URL', plugin_dir_url( __FILE__ ) );
-define( 'CDWC_API_BASE', 'https://app.companydata.com' );
-define( 'CDWC_SITE', 'https://companydata.com' );
+define( 'COMPANYDATA_WC_VERSION', '0.1.0' );
+define( 'COMPANYDATA_WC_FILE', __FILE__ );
+define( 'COMPANYDATA_WC_DIR', plugin_dir_path( __FILE__ ) );
+define( 'COMPANYDATA_WC_URL', plugin_dir_url( __FILE__ ) );
+define( 'COMPANYDATA_WC_API_BASE', 'https://app.companydata.com' );
+define( 'COMPANYDATA_WC_SITE', 'https://companydata.com' );
 
-require_once CDWC_DIR . 'includes/helpers.php';
-require_once CDWC_DIR . 'includes/class-settings.php';
-require_once CDWC_DIR . 'includes/class-api-client.php';
-require_once CDWC_DIR . 'includes/class-rest.php';
-require_once CDWC_DIR . 'includes/class-checkout.php';
-require_once CDWC_DIR . 'includes/class-privacy.php';
-require_once CDWC_DIR . 'includes/class-admin.php';
-require_once CDWC_DIR . 'includes/class-plugin.php';
+require_once COMPANYDATA_WC_DIR . 'includes/helpers.php';
+require_once COMPANYDATA_WC_DIR . 'includes/class-settings.php';
+require_once COMPANYDATA_WC_DIR . 'includes/class-api-client.php';
+require_once COMPANYDATA_WC_DIR . 'includes/class-rest.php';
+require_once COMPANYDATA_WC_DIR . 'includes/class-checkout.php';
+require_once COMPANYDATA_WC_DIR . 'includes/class-privacy.php';
+require_once COMPANYDATA_WC_DIR . 'includes/class-admin.php';
+require_once COMPANYDATA_WC_DIR . 'includes/class-plugin.php';
 
 // WooCommerce feature compatibility: HPOS yes; the block checkout is not supported in this version.
 add_action( 'before_woocommerce_init', function () {
