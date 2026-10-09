@@ -42,6 +42,12 @@
 		function say( text ) {
 			note.text( text || '' ).attr( 'hidden', ! text );
 		}
+		function busy( on ) {
+			$input.toggleClass( 'companydata-loading', on ).attr( 'aria-busy', on ? 'true' : 'false' );
+		}
+		function hidden( name ) {
+			return wrap.closest( 'form' ).find( 'input[name="companydata_' + type + '_' + name + '"]' );
+		}
 
 		function render( rows, warnings ) {
 			close();
@@ -83,6 +89,8 @@
 			controller = new AbortController();
 			const c = country();
 			if ( ! c || ( cfg.countries || [] ).indexOf( c ) < 0 ) return;
+			const mine = controller;
+			busy( true );
 			try {
 				const sep = cfg.restUrl.indexOf( '?' ) < 0 ? '?' : '&';
 				const r = await fetch( cfg.restUrl + sep + new URLSearchParams( { q, country: c } ), {
@@ -100,6 +108,9 @@
 				render( body.data || [], body.warnings );
 			} catch ( e ) {
 				if ( e.name !== 'AbortError' ) close();
+			} finally {
+				// A newer search owns the spinner once this one is aborted.
+				if ( controller === mine ) busy( false );
 			}
 		}
 
@@ -124,8 +135,8 @@
 			const company = field( 'company' );
 			justFilled = r.name;
 			company.val( r.name ).trigger( 'change' );
-			wrap.closest( 'form' ).find( 'input[name="companydata_' + type + '_id"]' ).val( r.id || '' );
-			wrap.closest( 'form' ).find( 'input[name="companydata_' + type + '_registration"]' ).val( r.registration || '' );
+			hidden( 'id' ).val( r.id || '' );
+			hidden( 'registration' ).val( r.registration || '' );
 			if ( cfg.regField && type === 'billing' ) $( '#billing_company_registration' ).val( r.registration || '' );
 
 			const applyAddress = () => {
@@ -148,6 +159,7 @@
 			// A reply to an earlier keystroke must not overwrite the pick.
 			clearTimeout( timer );
 			if ( controller ) controller.abort();
+			busy( false );
 			close();
 			if ( r ) fill( r );
 		}
@@ -156,7 +168,13 @@
 			const q = $input.val().trim();
 			clearTimeout( timer );
 			if ( q === justFilled ) return;
+			// Edited after a pick: the register match no longer applies.
+			justFilled = '';
+			hidden( 'id' ).val( '' );
+			hidden( 'registration' ).val( '' );
 			if ( q.length < ( cfg.minChars || 3 ) ) {
+				if ( controller ) controller.abort();
+				busy( false );
 				close();
 				say( '' );
 				return;
