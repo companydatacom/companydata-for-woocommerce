@@ -22,6 +22,7 @@ class Checkout {
 	public static function init(): void {
 		add_action( 'wp_enqueue_scripts', array( __CLASS__, 'assets' ) );
 		add_filter( 'woocommerce_checkout_fields', array( __CLASS__, 'fields' ) );
+		add_filter( 'woocommerce_default_address_fields', array( __CLASS__, 'country_first' ) );
 		add_action( 'woocommerce_after_checkout_billing_form', array( __CLASS__, 'hidden_inputs' ) );
 		add_action( 'woocommerce_after_checkout_shipping_form', array( __CLASS__, 'hidden_inputs_shipping' ) );
 		add_action( 'woocommerce_checkout_create_order', array( __CLASS__, 'save_order' ), 10, 2 );
@@ -63,6 +64,18 @@ class Checkout {
 	/**
 	 * Optional visible registration-number field under Company.
 	 */
+	/**
+	 * Lookups search the selected country, so ask for it before Company
+	 * (priority 30). Set on the default address fields so WooCommerce's
+	 * per-country reordering keeps it there.
+	 */
+	public static function country_first( array $fields ): array {
+		if ( Settings::get( 'country_first' ) && isset( $fields['country'] ) ) {
+			$fields['country']['priority'] = 25;
+		}
+		return $fields;
+	}
+
 	public static function fields( array $fields ): array {
 		$mode = (string) Settings::get( 'registration_field', 'hidden' );
 		if ( 'hidden' === $mode || ! isset( $fields['billing']['billing_company'] ) ) {

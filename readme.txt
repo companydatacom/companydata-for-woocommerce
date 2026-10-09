@@ -26,6 +26,7 @@ B2B checkouts ask for a company name and then make the customer type the address
 * The company's registration number and CompanyData ID are saved on the order and shown on the order screen, and remembered on the customer account.
 * An optional visible "Company registration number" field, optional or required, which also looks the company up when a number is typed.
 * Which countries to search (your selling countries by default), which fields to fill, how many suggestions, how long to cache.
+* Country is asked before the company name (on by default), so suggestions come from the right register from the first letter.
 * Limits that protect your plan: lookups per visitor per day and a site-wide daily cap. Repeat lookups are served from cache and cost nothing.
 * A Usage screen with the searches sent per day.
 

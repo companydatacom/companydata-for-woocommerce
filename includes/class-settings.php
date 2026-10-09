@@ -28,6 +28,7 @@ class Settings {
 			'limit_ip_day'       => 200,
 			'daily_cap'          => 0,
 			'shipping'           => 1,
+			'country_first'      => 1,
 			'fill_fields'        => array( 'address_1', 'address_2', 'postcode', 'city', 'state', 'country' ),
 			'registration_field' => 'hidden', // hidden | optional | required
 			'credit_link'        => 0,
@@ -74,6 +75,7 @@ class Settings {
 		$out['limit_ip_day'] = max( 0, (int) ( $input['limit_ip_day'] ?? 200 ) );
 		$out['daily_cap']    = max( 0, (int) ( $input['daily_cap'] ?? 0 ) );
 		$out['shipping']     = empty( $input['shipping'] ) ? 0 : 1;
+		$out['country_first'] = empty( $input['country_first'] ) ? 0 : 1;
 
 		$allowed            = array( 'address_1', 'address_2', 'postcode', 'city', 'state', 'country' );
 		$fields             = isset( $input['fill_fields'] ) && is_array( $input['fill_fields'] ) ? $input['fill_fields'] : array();

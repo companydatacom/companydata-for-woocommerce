@@ -206,6 +206,9 @@ class Admin {
 					</fieldset></td></tr>
 				<tr><th scope="row"><?php esc_html_e( 'Shipping address', 'companydata-for-woocommerce' ); ?></th>
 					<td><label><input type="checkbox" name="<?php echo esc_attr( $name ); ?>[shipping]" value="1" <?php checked( $s['shipping'] ); ?>> <?php esc_html_e( 'Also offer the lookup on the shipping Company field', 'companydata-for-woocommerce' ); ?></label></td></tr>
+				<tr><th scope="row"><?php esc_html_e( 'Field order', 'companydata-for-woocommerce' ); ?></th>
+					<td><label><input type="checkbox" name="<?php echo esc_attr( $name ); ?>[country_first]" value="1" <?php checked( $s['country_first'] ); ?>> <?php esc_html_e( 'Ask for the country before the company name', 'companydata-for-woocommerce' ); ?></label>
+					<p class="description"><?php esc_html_e( 'The lookup searches the selected country, so customers get the right suggestions from the first letter.', 'companydata-for-woocommerce' ); ?></p></td></tr>
 				<tr><th scope="row"><?php esc_html_e( 'Registration number field', 'companydata-for-woocommerce' ); ?></th>
 					<td><select name="<?php echo esc_attr( $name ); ?>[registration_field]">
 						<option value="hidden" <?php selected( $s['registration_field'], 'hidden' ); ?>><?php esc_html_e( 'Not shown - saved on the order when a company is picked', 'companydata-for-woocommerce' ); ?></option>
