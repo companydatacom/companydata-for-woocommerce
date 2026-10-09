@@ -1,5 +1,5 @@
 === CompanyData for WooCommerce - Company Lookup & Address Autofill ===
-Contributors: companydata
+Contributors: companydatacom
 Tags: woocommerce, b2b, company lookup, address autocomplete, kvk
 Requires at least: 6.4
 Tested up to: 7.1
@@ -49,7 +49,7 @@ What is sent, and when:
 
 Every request carries your API key and a User-Agent with the plugin, WordPress and WooCommerce versions.
 
-CompanyData terms: https://companydata.com/terms-conditions-webshop/
+CompanyData terms: https://companydata.com/bold-platform-terms/
 CompanyData privacy statement: https://companydata.com/privacy-statement/
 
 The optional "Company lookup by CompanyData" line under the field is off by default and can be switched on under WooCommerce > CompanyData. No other external requests are made. No tracking scripts are loaded.
